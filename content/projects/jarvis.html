@@ -1,0 +1,382 @@
+---
+date: 2019-08-22T09:45:23+05:30
+draft: false
+title: AI Assistant
+---
+<nav class="navbar has-text-centered">
+  <div class="navbar-burger burger" data-target="navMenubd-example">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+<div id="navMenubd-example" class="navbar-menu title content is-size-6">
+  <div class="navbar-start">
+    <div class="navbar-item ml">
+      <a href="/index.html">
+        🏡Home
+      </a>
+    </div>
+    <div class="navbar-item ml">
+      <a href="/projects">
+        🧪 Projects
+      </a>
+    </div>
+    <div class="navbar-item ml">
+      <a href="/about">
+        🐱‍🏍About me
+      </a>
+    </div>
+    <div class="navbar-item mr">
+      <a href="/blog">
+        📝Blog
+      </a>
+    </div>
+  </div>
+</div>
+</nav>
+
+<div class=" container box chil content mt notification">
+  <p class="is-size-3 has-text-info has-text-centered"> Personal voice assistant using Python</p>
+  <p class="comma">This assistant can open applications, search the web, Youtube, Wikipedia, and search the entire
+    Wolfram Alpha Database for all of your questions. </p>
+
+  <p class="is-size-5 has-text-info">Basic Requirements:</p>
+  <p class="subtitle is-size-6 comma">Getting started is pretty simple. There are just three
+    prerequisites
+    and then you are on your way. You're going to need-</p>
+  <ul class="content" type="1">
+    <li><a href="https://www.python.org/downloads/" class="has-text-link">Python 3</a></li>
+    <li><a href="https://linuxize.com/post/how-to-install-pip-on-ubuntu-18.04/" class="has-text-link">Pip 3 </a></li>
+    <li>Sudo</li>
+    <li>A good text editor such as <a href="https://code.visualstudio.com/download" class="has-text-link">Visual Studio
+        Code</a></li>
+  </ul>
+  <p class="is-size-5 has-text-grey-light inline comma">Step 1:</p>
+  <p class="is-size-5 has-text-info inline">Installing the packages</p>
+  <p class="comma">There are a few packages to be installed first such as gTTS, pyaudio, playsound etc. Installing them
+    is simple,
+    just run the following commands in the Command Prompt or Terminal.</p>
+
+  <pre>$:~ pip3 install gTTS</pre>
+  <p class="comma">The above command installs the <b>Google Text To Speech</b> library which will be converting what we
+    speak into
+    text.</p>
+
+
+  <pre>$:~ pip3 install SpeechRecognition</pre>
+  <p class="comma">The above command installs the <b>Speech Recognition</b> package which understands our audio and
+    converts it into
+    text.</p>
+
+  <pre>$:~ pip3 install -U selenium</pre>
+  <p class="comma">The above command installs the <b>Selenium Web Driver</b> package that controls and searches the web.
+  </p>
+
+  <pre>$:~ pip3 install wolfram-alpha-api</pre>
+  <p class="comma">The above command installs the <b>Wolfram Alpha</b> Api which calculates everything you ask for. </p>
+
+  <pre>$:~ pip3 install playsound</pre>
+  <p class="comma">The above command installs the <b>Playsound</b> package which plays the saved audio file from your
+    computer.</p>
+
+  <pre>$:~ sudo apt-get install python3-pyaudio</pre>
+  <p class="comma">The above command installs the <b>Pyaudio</b> package which 'hears' your audio</p>
+
+
+  <p class="is-size-5 has-text-grey-light inline">Step 2:</p>
+  <p class="is-size-5 has-text-info inline">Getting started with the code</p>
+
+  <pre> import speech_recognition as sr #to recognise your audio
+      import playsound  # to play saved mp3 file
+      from gtts import gTTS  # google text to speech which converts text into speech
+      import os  # to save/open files
+      import wolframalpha  # to calculate any query the user asks
+      import random   #to play a random song which not even the user can predict
+      from selenium import webdriver  # to control browser operations
+      from selenium.webdriver.chrome.options import Options
+      from pygame import mixer #to play songs
+      
+      num = 1
+      
+      def assistant_speaks(output):
+          global num
+      
+          # num to rename every audio file
+          # with different name to remove ambiguity
+          num += 1
+          print("Jarvis : ", output)
+      
+          toSpeak = gTTS(text=output, lang='en-IN', slow=False)
+          # saving the audio file given by google text to speech
+          file = str(num)+".mp3"
+          toSpeak.save(file)
+          # playsound package is used to play the same file.
+          playsound.playsound(file, True)
+          os.remove(file)
+      
+      
+      def get_audio():
+      
+          rObject = sr.Recognizer()
+          audio = ''
+      
+          with sr.Microphone() as source:
+              print("Speak..")
+      
+              # recording the audio using speech recognition
+              audio = rObject.listen(source, phrase_time_limit=7)
+          print("Stop.")  # limit 5 secs
+      
+          try:
+      
+              text = rObject.recognize_google(audio, language='en-IN')
+              print("You : ", text)
+              return text
+      
+          except:
+      
+              assistant_speaks("Could'nt understand your audio, Please try again! :(")
+              return 0
+      
+      
+     def search_web(input):
+      
+          options = Options()
+          options.add_argument('start-maximized')
+          options.add_argument('disable-infobars')
+          driver = webdriver.Chrome(chrome_options=options)
+          driver.implicitly_wait(1)
+      
+          if 'youtube' in input.lower():
+      
+              assistant_speaks("Opening in youtube!")
+              indx = input.lower().split().index('youtube')
+              query = input.split()[indx + 1:]
+              driver.get("https://www.youtube.com/results?search_query=" + str(query))
+      
+          elif 'wikipedia' in input.lower():
+      
+              assistant_speaks("Opening Wikipedia")
+              indx = input.lower().split().index('wikipedia')
+              query = input.split()[indx + 1:]
+              driver.get("https://en.wikipedia.org/wiki/" + '_'.join(query))
+      
+          elif 'maps' in input.lower():
+      
+              assistant_speaks("Opening Google Maps")
+              indx = input.lower().split().index('maps')
+              query = input.split()[indx + 1:]
+              driver.get("https://www.google.com/maps/place/" + '_'.join(query))
+      
+          else:
+      
+              if 'google' in input:
+      
+                  indx = input.lower().split().index('google')
+                  query = input.split()[indx + 1:]
+                  driver.get("https://www.google.com/search?q =" + '+'.join(query))
+      
+              elif 'search' in input:
+      
+                  indx = input.lower().split().index('google')
+                  query = input.split()[indx + 1:]
+                  driver.get("https://www.google.com/" + '+'.join(query))
+      
+              else:
+      
+                  driver.get("https://www.google.com/search?q=" +
+                             '+'.join(input.split()))
+      </pre>
+
+  <p class="comma">The main functions of the program are the <code class="has-text-grey-dark">get_audio()</code> and
+    <code class="has-text-grey-dark">assistant_speaks</code>functions. The <code
+      class="has-text-grey-dark">get_audio()</code> function "listens" to the audio(What you speak) through the
+    microphone, the time limit is set to 7 sec (You can change it). The <code class="has-text-grey-dark">
+      assistant_speaks</code> function is used to speak out the output after the computer has processed your query.
+    So now you probably understand how the assistant's going to work. If not, don't fret. I too didn't get it for
+    the first time <i class="fa fa-smile-o" aria-hidden="true"></i></p>
+
+  <p class="is-size-5 has-text-grey-light inline">Step 3:</p>
+  <p class="is-size-5 has-text-info inline">Random Fun</p>
+  <p class="comma">We have used the <code class="has-text-grey-dark">elif</code> function so that the assistant can
+    answer on
+    its own
+    without searching the web or anything. Examples are queries like "Who made you", "Where do you live" etc. </p>
+  <pre>def process_text(input):
+    try:
+        if 'search' in input or 'play' in input:
+            # a basic web crawler using selenium
+            search_web(input)
+        elif "who made you" in input or "who created you" in input:
+            speak = "I have been created by Chivukula Virinchi."
+            assistant_speaks(speak)
+        elif "what is your name" in input or "who are you" in input:
+            speak = "Did I forget to introduce myself? I am your personal assistant. Assistance is my middle name."
+            assistant_speaks(speak) 
+        elif "when is your birthday" in input:
+            speak = "I go through lots and lots of updates. So that's about 365-birthdays."
+            assistant_speaks(speak)        
+        elif "where do you live" in input:
+            speak = "I’m stuck inside a device!! Help! Just kidding. I like it in here. Sometimes I hang out in the Cloud. It gives me a great view of the World Wide Web."
+            assistant_speaks(speak)
+        elif "do you sleep" in input or "when do you sleep" in input:
+            speak = "I take power naps when we aren't talking."
+            assistant_speaks(speak)                
+        elif "self-destruct" in input:
+            speak = "Commencing Self-Destruct protocol in T-minus 2 seconds Boom! Actually I think I'll stick around"
+            assistant_speaks(speak)
+        elif "what do you think about me" in input or "what is your opinion about me" in input:
+            speak = "I think you're extremely cool :)"
+            assistant_speaks(speak) 
+        elif "sing a song" in input:
+            speak = "Here is a song I composed just for lovely people like you!"
+            assistant_speaks(speak)
+            r = str(random.randrange(6))
+            playsound.playsound("song" + r + ".mp3", True)</pre>
+
+  <p class="comma">PS: I didn't include the audio files with the names so you need to download them from the <a
+      href="">Github
+      repo</a>.</p>
+
+  <p class="is-size-5 has-text-grey-light inline">Step 4:</p>
+  <p class="is-size-5 has-text-info inline">Doing the Calculations</p>
+  <p class="comma">Now it's time for some calculations. For this, we are going to use the <code
+      class="has-text-grey-dark">wolfram-alpha-api</code> which provides answers to litreally every question you
+    ask.
+  </p>
+  <pre>elif "calculate" in input.lower():
+          app_id = "#app_id here"
+          client = wolframalpha.Client(app_id)
+          indx = input.lower().split().index('calculate')
+          query = input.split()[indx + 1:]
+          res = client.query(' '.join(query))
+          answer = next(res.results).text
+          assistant_speaks("The answer is " + answer)
+      elif 'open' in input:
+
+          # another function to open
+          # different application availaible
+          open_application(input.lower())
+      else:
+          search_web(input)
+  except:
+    assistant_speaks("Could not understand your audio, PLease try again!")
+  return 0
+</pre>
+
+  <p class="comma">PS: You'll need a Wolfram Alpha developer app id which I have not included in this tutorial.
+    <a href="http://products.wolframalpha.com/api/">Create your own APP ID here!</a>
+    <br> Whenever you use this function, always use
+    the word <b>calculate</b> so that your query can be redirected to the <code
+      class="has-text-grey-dark">wolfram-alpha-api</code>.
+  </p>
+
+
+  <p class="is-size-5 has-text-grey-light inline">Step 5:</p>
+  <p class="is-size-5 has-text-info inline">The finishing touch</p>
+  <p class="comma">Now all that's left to do is to give a few finishing touches and then we are done. Add this final
+    block to your
+    main code and then you're done!</p>
+  <pre>if __name__ == "__main__":
+    # assistant_speaks("What's your name?")
+    name = 'Virinchi'
+    # name = get_audio()
+    assistant_speaks("Hello, " + name + '.')
+
+    while(1):
+
+        assistant_speaks("How can I help you " + name + '?')
+        text = get_audio()
+
+        if text == 0:
+            continue
+
+        if "goodnight" in str(text) or "bye" in str(text):
+            assistant_speaks("Ok bye, " + name+'.')
+            break
+
+        # calling process text to process the query
+        process_text(text)
+
+# function used to open application
+# present inside the system.
+def open_application(input):
+
+    if "chrome" in input:
+        assistant_speaks("Google Chrome")
+        os.startfile('/usr/bin/google-chrome-stable')
+        return
+
+    elif "firefox" in input or "mozilla" in input:
+        assistant_speaks("Opening Mozilla Firefox")
+        os.startfile('/usr/bin/firefox')
+        return
+
+    elif "word" in input:
+        assistant_speaks("Opening Microsoft Word")
+        os.startfile(
+            'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Office 2013\\Word 2013.lnk')
+        return
+
+    elif "excel" in input:
+        assistant_speaks("Opening Microsoft Excel")
+        os.startfile(
+            'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Office 2013\\Excel 2013.lnk')
+        return
+
+    else:
+
+        assistant_speaks("Application not available")
+        return
+</pre>
+  <p class="is-size-5 has-text-grey-light inline">Step 6:</p>
+  <p class="is-size-5 has-text-info inline">And then you're done!</p>
+
+  <p class="comma">Now you have officially finished building an AI assistant! All that's left to do now is to take it
+    for a trial run
+    and then show it off! You can run it in the terminal/cmd using <code class="has-text-grey-dark">python3
+      filename.py</code></p>
+  <p class="subtitle is-6 comma">PS: I have not included getting the google token which you can obtain from <a
+      href="">here</a></p>
+  <p><b> I have also created a Github Repo which include audio files and other important files for the assistant to
+      work.</b>
+  </p>
+
+  <p class="is-size-5 has-text-grey-light inline">Step 7:</p>
+  <p class="is-size-5 has-text-info inline">Example Queries</p>
+  <ol class="comma">
+    <li><b>"Youtube Chivukula Virinchi"</b></li>
+    <p class="is-7">This query searches Youtube for Chivukula Virinchi</p>
+    <li><b>"Wikipedia ISRO"</b></li>
+    <p class="is-7">This query searches Wikipedia for 'ISRO'</p>
+    <li><b>"Maps New Delhi"</b></li>
+    <p class="is-7">This query searches Maps for 'New Delhi'</p>
+    <li><b>"Sing a Song"</b></li>
+    <p class="is-7">This query plays a random audio file from the list of songs.</p>
+    <li><b>"Where do you live"</b></li>
+    <p class="is-7">To this, the assistant replies "that its stuck inside a device."</p>
+    <li><b>"Self-Destruct"</b></li>
+    <p class="is-7">To this, the assistant replies "Self-Destructing in 5 4 3 2 1 Boom!"</p>
+    <li><b>"Calculate square root of 2"</b></li>
+    <p class="is-7">To this it says, the answer is 1.41421356237...</p>
+    <li><b>"Calculate the formula of Methyl Isocyanate"</b></li>
+    <p class="is-7">To this it says, the answer is C<sub>2</sub>H<sub>3</sub>NO</p>
+    <li><b>"Calculate 6 factorial"</b></li>
+    <p class="is-7">To this it replies, the answer is 720</p>
+    <li><b>"Cricket"</b></li>
+    <p class="is-7">For this query, it searches Google for 'Cricket'</p>
+  </ol>
+
+  <p class="is-size-5 has-text-grey-light inline">Step 8:</p>
+  <p class="is-size-5 has-text-info inline">Some important things to keep in mind</p>
+  <p class="comma">You can customise the above code into your style and call it your own. Just a little experience with
+    Python and a few tweaks here and there and its all yours. Customise it just the way you like it and make it yours.
+  </p>
+  <p class="comma">The above are just some examples to show you the power of AI and you are free to experiment.
+    <br> Whenever you need the assistant to take input from the<code class="has-text-grey-dark">wolfram-alpha-api</code>
+    you must include the word <b>"Calculate"</b> before the query.</p>
+  <p class="comma">I have included the entire code and additional instructions in a Github Repo and you can download it
+    from here.
+    This file includes audio files which will be used to play the 'song' the assistant sings.</p>
+  <h1 class="card-footer has-text-danger" style="justify-content: center">Happy coding!</h1>
+</div>

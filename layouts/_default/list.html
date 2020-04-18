@@ -1,0 +1,36 @@
+{{ define "main" }}
+<div class="main">
+  <nav class="navbar has-text-centered">
+    <div class="navbar-burger burger" data-target="navMenubd-example">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  <div id="navMenubd-example" class="navbar-menu title content is-size-6">
+    <div class="navbar-start">
+      <div class="navbar-item ml">
+        <a href="/index.html">
+          🏡Home
+        </a>
+      </div>
+      <div class="navbar-item ml">
+        <a href="/projects">
+          🧪 Projects
+        </a>
+      </div>
+      <div class="navbar-item ml">
+        <a href="/about">
+          🐱‍🏍About me
+        </a>
+      </div>
+      <div class="navbar-item mr">
+        <a href="/blog">
+          📝Blog
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+  {{ .Content }}
+</div>
+{{ end }}

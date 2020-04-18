@@ -1,0 +1,12 @@
+{
+  "name": "starter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.10.1",
+    "bulma": "^0.7.5",
+    "bulma-modal-fx": "^1.1.1",
+    "jquery": "^3.4.1"
+  }
+}

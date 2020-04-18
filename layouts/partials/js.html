@@ -1,0 +1,73 @@
+{{ $jquery := resources.Get "js/vendor/jquery.min.js" }}
+{{ $particles := resources.Get "js/vendor/particles.js" }}
+
+{{ $js := slice $jquery $particles | resources.Concat "js/bundle.js" | resources.Minify }}
+
+<script src="{{$js.RelPermalink}}">
+</script>
+
+<script>
+  particlesJS.load('particles-js', '/particles.json', function () {
+    console.log('callback - particles.js config loaded');
+  });
+</script>
+
+<script>
+  var messageBox = document.querySelector('.js-message');
+  var btn = document.querySelector('.js-message-btn');
+  var card = document.querySelector('.js-profile-card');
+  var closeBtn = document.querySelectorAll('.js-message-close');
+
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
+    card.classList.add('active');
+  });
+
+  closeBtn.forEach(function (element, index) {
+    console.log(element);
+    element.addEventListener('click', function (e) {
+      e.preventDefault();
+      card.classList.remove('active');
+    });
+  });
+</script>
+
+<script>
+  document.querySelectorAll('a[href^="#ending"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    // Get all "navbar-burger" elements
+    var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+    // Check if there are any nav burgers
+    if ($navbarBurgers.length > 0) {
+
+      // Add a click event on each of them
+      $navbarBurgers.forEach(function ($el) {
+        $el.addEventListener('click', function () {
+
+          // Get the target from the "data-target" attribute
+          var target = $el.dataset.target;
+          var $target = document.getElementById(target);
+
+          // Toggle the class on both the "navbar-burger" and the "navbar-menu"
+          $el.classList.toggle('is-active');
+          $target.classList.toggle('is-active');
+
+        });
+      });
+    }
+
+  });
+</script>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="Description" content="Author: Chivukula Virinchi, Category: Blog">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  {{ partial "head.html" . }}
+  <title>
+    {{ block "title" . }}
+    {{ .Site.Title }}
+    {{ end }}</title>
+</head>
+
+<body>
+  <!-- Code that all your templates share, like a header -->
+  {{ block "main" . }}
+  <!-- The part of the page that begins to differ between templates -->
+  {{ end }}
+  {{ partial "js.html" . }}
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-149895172-1');
+  </script>
+</body>
+
+</html>
